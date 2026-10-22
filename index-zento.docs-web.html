@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Documentación de Zento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fff; --panel:#f7f8fb; --fg:#1b1f2a; --muted:#5b6474; --faint:#8a92a4;
+  --line:#e7e9f0; --accent:#12a150; --accent-soft:#e7f7ee; --code-bg:#f4f5f9;
+  --warn:#b4540a; --warn-soft:#fdf1e7; --ok:#1f7a4d; --ok-soft:#e9f6ef;
+  --sans:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e1016; --panel:#14171f; --fg:#e8eaf0; --muted:#9aa2b2; --faint:#6b7483;
+  --line:#242836; --accent:#8b86f8; --accent-soft:#1c1d33; --code-bg:#171a23;
+  --warn:#e5a661; --warn-soft:#2a1f12; --ok:#6fcf9b; --ok-soft:#12241a; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0e1016; --panel:#14171f; --fg:#e8eaf0; --muted:#9aa2b2; --faint:#6b7483;
+  --line:#242836; --accent:#8b86f8; --accent-soft:#1c1d33; --code-bg:#171a23;
+  --warn:#e5a661; --warn-soft:#2a1f12; --ok:#6fcf9b; --ok-soft:#12241a; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.65}
+a{color:var(--accent);text-decoration:none}
+img{max-width:100%}
+
+.nav{display:flex;align-items:center;gap:22px;border-bottom:1px solid var(--line);
+  padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));
+  padding-block:12px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:17px;color:var(--fg)}
+.logo{width:26px;height:26px;border-radius:7px;background:#a1f5a7;color:#0b3d22;display:grid;place-items:center;font-weight:800}
+.nav-cta{margin-left:auto;background:#111413;color:#fff;font-size:13px;font-weight:600;padding:7px 13px;border-radius:8px}
+.theme{margin-left:14px;border:1px solid var(--line);background:transparent;color:var(--muted);width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:14px}
+.menu-btn{display:none;place-items:center;width:32px;height:32px;border:1px solid var(--line);background:transparent;color:var(--fg);border-radius:8px;cursor:pointer;font-size:16px}
+.side-top{display:flex;align-items:center;gap:8px;margin:0 0 6px}
+.side-home{flex:1;text-align:left;border:0;background:transparent;font-family:var(--sans);
+  color:var(--muted);font-size:13.5px;font-weight:600;padding:7px 10px;border-radius:7px;cursor:pointer}
+.side-home:hover{background:var(--accent-soft);color:var(--fg)}
+.side-theme{flex:none;border:1px solid var(--line);background:transparent;color:var(--muted);
+  width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:14px}
+.side-theme:hover{color:var(--fg);border-color:var(--accent)}
+/* modo embebido (dentro de Finpro): sin cabecera propia */
+.floatmenu{display:none;position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:10px;z-index:30;
+  width:36px;height:36px;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:9px;cursor:pointer;place-items:center;font-size:17px}
+.embedded .nav{display:none}
+.embedded .body{height:100%}
+@media(max-width:620px){.embedded .floatmenu{display:grid}}
+
+.body{display:grid;grid-template-columns:300px minmax(0,1fr);height:calc(100% - 53px)}
+.side{overflow:auto;padding:16px 12px 48px;
+  background:#f4f1e7;
+  border-right:1px solid #e7e3d5;
+  --sfg:#1b1f2a; --smuted:#5b6474; --sfaint:#a7a291; --shover:rgba(17,20,19,.06);
+  color:var(--sfg)}
+/* menú lateral estilo Zento (crema + verde menta) */
+.side .side-home{color:var(--smuted)}
+.side .side-home:hover{background:var(--shover);color:var(--sfg)}
+.side .grp>h4{color:var(--sfg)}
+.side .chev{color:var(--sfaint)}
+.side .pg>.row{color:var(--smuted)}
+.side .pg>.row:hover{background:var(--shover);color:var(--sfg)}
+.side .pg.active>.row{color:#0b3d22;font-weight:600;background:#a1f5a7;border-radius:7px}
+.side .sub{color:var(--smuted);border-left-color:transparent}
+.side .sub:hover{background:var(--shover);color:var(--sfg)}
+.side .sub.on{color:#0b6e39;border-color:#12a150;font-weight:600;background:#e7f7ee}
+/* buscador */
+.search-wrap{position:relative;margin:2px 4px 12px}
+.search-ic{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#a7a291;display:grid;place-items:center;pointer-events:none}
+.search-ic svg{width:15px;height:15px}
+.search{width:100%;border:1px solid #e0dccb;background:#f4f1e7;color:var(--fg);
+  font-family:var(--sans);font-size:13.5px;padding:8px 11px 8px 32px;border-radius:9px;outline:none}
+.search::placeholder{color:#a7a291}
+.search:focus{border-color:#12a150;background:#f4f1e7}
+.results{position:absolute;left:0;right:0;top:calc(100% + 5px);z-index:40;background:var(--bg);color:var(--fg);
+  border:1px solid var(--line);border-radius:11px;box-shadow:0 20px 44px -16px rgba(0,0,0,.45);
+  max-height:62vh;overflow:auto;display:none}
+.results.open{display:block}
+.ritem{display:block;width:100%;text-align:left;border:0;background:transparent;cursor:pointer;
+  padding:9px 13px;border-bottom:1px solid var(--line);font-family:var(--sans)}
+.ritem:last-child{border-bottom:0}
+.ritem:hover,.ritem.sel{background:var(--accent-soft)}
+.ritem .rt{font-size:13.5px;font-weight:600;color:var(--fg)}
+.ritem .rp{font-size:11px;color:var(--faint);margin-top:1px;letter-spacing:.02em}
+.ritem .rs{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.45}
+.ritem mark{background:rgba(79,70,229,.22);color:var(--accent);padding:0 1px;border-radius:3px;font-weight:600}
+.rempty{padding:13px;color:var(--muted);font-size:13px}
+.chev{display:inline-block;color:var(--faint);font-size:10px;transition:transform .15s;width:12px;text-align:center}
+.grp.closed>.pages{display:none}
+.grp.closed>h4 .chev{transform:rotate(-90deg)}
+.grp>h4{font-size:14px;font-weight:700;color:var(--fg);margin:12px 4px 4px;display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.pg{margin:1px 0}
+.pg.closed>.subs{display:none}
+.pg.closed>.row .chev{transform:rotate(-90deg)}
+.pg>.row{display:flex;align-items:center;gap:7px;font-size:13.5px;color:var(--muted);padding:6px 8px 6px 14px;border-radius:7px;cursor:pointer;user-select:none}
+.pg>.row:hover{background:var(--accent-soft);color:var(--fg)}
+.pg.active>.row{color:var(--accent);font-weight:600}
+.pg>.row>.lbl{flex:1}
+.subs{display:flex;flex-direction:column;gap:1px;margin:1px 0 4px}
+.sub{font-size:13px;color:var(--muted);padding:5px 8px 5px 34px;border-radius:7px;cursor:pointer;border-left:2px solid transparent;margin-left:17px}
+.sub:hover{background:var(--accent-soft);color:var(--fg)}
+.sub.on{color:var(--accent);border-color:var(--accent);font-weight:600}
+
+.main{overflow:auto;padding:34px max(28px,env(safe-area-inset-right,0px)) 100px max(28px,env(safe-area-inset-left,0px));min-width:0}
+.wrap{max-width:1060px;margin-inline:auto}
+.crumb{font-size:12.5px;color:var(--faint);margin-bottom:8px;letter-spacing:.02em}
+.main h1{font-size:30px;font-weight:800;margin:0 0 6px;letter-spacing:-.02em;text-wrap:balance}
+.lead{color:var(--muted);font-size:16px;margin:0 0 20px}
+.sec{scroll-margin-top:18px}
+.sec h2{font-size:21px;font-weight:700;margin:30px 0 10px;letter-spacing:-.01em;padding-top:8px}
+.ct-body :is(h3){font-size:16px;margin:18px 0 6px}
+.ct-body h4{font-size:13px;font-weight:700;margin:16px 0 6px;letter-spacing:.01em}
+.ep-left table{font-size:13.5px}
+.ep-left h4:first-child{margin-top:8px}
+.ct-body p{margin:0 0 11px;max-width:70ch}
+.ct-body ul,.ct-body ol{margin:0 0 12px;padding-left:22px}
+.ct-body li{margin:4px 0}
+code{font-family:var(--mono);font-size:.88em;background:var(--code-bg);padding:1px 5px;border-radius:5px}
+figure.code{margin:0 0 14px}
+figure.code figcaption{font-size:12px;color:var(--faint);margin-bottom:5px;letter-spacing:.03em;text-transform:uppercase}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:0}
+pre code{background:none;padding:0;font-size:13px;line-height:1.55}
+table{border-collapse:collapse;width:100%;margin:0 0 16px;font-size:14px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+th{background:var(--panel);font-weight:600}
+.callout{border:1px solid var(--line);border-radius:9px;padding:11px 14px 11px 14px;margin:0 0 14px;background:var(--accent-soft);border-left:3px solid var(--accent)}
+.callout .ct{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:3px}
+.callout .cb p:last-child{margin-bottom:0}
+.callout.warn{background:var(--warn-soft);border-left-color:var(--warn)} .callout.warn .ct{color:var(--warn)}
+.callout.tip{background:var(--ok-soft);border-left-color:var(--ok)} .callout.tip .ct{color:var(--ok)}
+ol.steps{counter-reset:s;list-style:none;padding:0;margin:0 0 14px}
+ol.steps>li{counter-increment:s;position:relative;padding:3px 0 10px 38px;margin:0}
+ol.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700}
+ol.steps .step-t{font-weight:600;display:block}
+.accs{display:flex;flex-direction:column;gap:8px;margin:0 0 14px}
+details.acc{border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--panel)}
+details.acc summary{padding:10px 14px;cursor:pointer;font-weight:600;list-style:none}
+details.acc summary::-webkit-details-marker{display:none}
+details.acc summary::before{content:"▸ ";color:var(--faint)}
+details.acc[open] summary::before{content:"▾ "}
+.acc-b{padding:2px 14px 12px}
+.update{border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 14px;background:var(--panel)}
+.uhead{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.ubadge{background:var(--accent);color:#fff;font-weight:700;font-size:12px;padding:3px 9px;border-radius:20px}
+.udate{color:var(--faint);font-size:13px}
+/* portada (centrada) */
+.home{max-width:840px;margin:30px auto 0;text-align:center}
+.home .eyebrow{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+.home h1{font-size:34px;margin:0 0 10px}
+.home .home-sub{color:var(--muted);font-size:17px;margin:0 auto 30px;max-width:54ch}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.cards{grid-template-columns:1fr}}
+.card{display:flex;gap:14px;align-items:flex-start;border:1px solid var(--line);border-radius:14px;
+  padding:20px;background:var(--panel);cursor:pointer;transition:border-color .15s,transform .15s,box-shadow .15s;
+  text-align:left;color:var(--fg);font-family:var(--sans);font-size:15px}
+.card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 10px 30px -14px rgba(79,70,229,.45)}
+.card .ic{flex:none;width:42px;height:42px;border-radius:11px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
+.card .ic svg{width:22px;height:22px}
+.card h3{margin:0 0 4px;font-size:17px;font-weight:700;color:var(--fg)}
+.card p{margin:0;color:var(--muted);font-size:14px;max-width:none}
+.card .arr{margin-left:auto;color:var(--faint);align-self:center;transition:transform .15s,color .15s}
+.card:hover .arr{color:var(--accent);transform:translateX(3px)}
+.brand{cursor:pointer}
+.shot{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:4px 0 16px;background:var(--panel)}
+.shot img{display:block;width:100%}
+.shot figcaption{font-size:12.5px;color:var(--faint);padding:7px 12px;border-top:1px solid var(--line)}
+/* endpoint en dos columnas: texto a la izquierda, código oscuro al costado */
+.ep-row{display:grid;grid-template-columns:minmax(0,0.85fr) minmax(0,1.15fr);gap:28px;align-items:start;margin:4px 0 8px}
+.ep-left p:last-child{margin-bottom:0}
+.ep-right{position:sticky;top:0}
+@media(max-width:900px){.ep-row{grid-template-columns:1fr;gap:14px}.ep-right{position:static}}
+.ep{display:flex;align-items:center;gap:10px;margin:0 0 12px;flex-wrap:wrap}
+.ep .m{font-size:11px;font-weight:700;letter-spacing:.04em;color:#fff;padding:3px 9px;border-radius:6px;background:var(--accent)}
+.ep .m-GET{background:#1f7a4d}.ep .m-POST{background:#111413}
+.ep .epath{font-family:var(--mono);font-size:13px;background:var(--code-bg);padding:4px 9px;border-radius:6px;word-break:break-all}
+
+/* panel de código oscuro (fijo, independiente del tema) */
+.codetabs.dark{--cbg:#0f1526;--cbar:#161d31;--ctext:#e6e9f5;--cmuted:#98a1bd;--cborder:#283150;--con:#84ed91;
+  background:var(--cbg);border:1px solid var(--cborder);border-radius:11px;overflow:hidden;margin:0 0 12px;color:var(--ctext)}
+.codetabs.dark .ctabs{display:flex;align-items:center;gap:4px;background:var(--cbar);border-bottom:1px solid var(--cborder);padding:5px 7px}
+.ctabs-scroll{display:flex;gap:2px;flex-wrap:wrap;flex:1;min-width:0}
+.codetabs.dark .ctab{border:0;background:transparent;color:var(--cmuted);font-family:var(--sans);font-size:12.5px;font-weight:600;
+  padding:6px 11px;border-radius:7px;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent}
+.codetabs.dark .ctab:hover{color:var(--ctext)}
+.codetabs.dark .ctab.on{color:var(--con);border-bottom-color:var(--con)}
+.copybtn{flex:none;border:1px solid var(--cborder);background:transparent;color:var(--cmuted);
+  display:grid;place-items:center;width:30px;height:28px;border-radius:7px;cursor:pointer;padding:0}
+.copybtn svg{width:15px;height:15px}
+.copybtn:hover{color:var(--ctext);border-color:var(--con)}
+.copybtn.done{color:#6fcf9b;border-color:#6fcf9b}
+.resp-label{flex:1;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--cmuted);padding-left:6px}
+.codetabs.dark .cpane{display:none;margin:0;border:0;border-radius:0;background:var(--cbg)}
+.codetabs.dark .cpane.on{display:block}
+.codetabs.dark pre.cpane{padding:14px 16px;white-space:pre-wrap;overflow-wrap:anywhere;overflow-x:hidden}
+.codetabs.dark code{color:var(--ctext);font-size:12.5px;background:none;padding:0}
+
+@media(max-width:620px){
+  .body{grid-template-columns:1fr}
+  .side{position:fixed;z-index:20;top:0;bottom:0;left:0;width:290px;transform:translateX(-100%);transition:transform .2s;padding-top:calc(16px + env(safe-area-inset-top,0px))}
+  .side.open{transform:none;box-shadow:0 0 40px rgba(0,0,0,.35)}
+  .menu-btn{display:inline-grid}
+}
+</style>
+</head>
+<body>
+<div class="nav">
+  <button class="menu-btn" id="menuBtn" aria-label="Menú">☰</button>
+  <div class="brand"><span class="logo">z</span>zento</div>
+  <a class="nav-cta" href="https://app.zento.lat" target="_blank" rel="noopener">Ir a Zento</a>
+</div>
+<button class="floatmenu" id="floatMenu" aria-label="Menú">☰</button>
+<div class="body">
+  <nav class="side" id="side">
+    <div class="search-wrap">
+      <span class="search-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+      <input id="q" class="search" type="text" placeholder="Buscar en la documentación…" autocomplete="off" spellcheck="false">
+      <div id="results" class="results"></div>
+    </div>
+    <div id="sidenav"></div>
+  </nav>
+  <main class="main" id="main"><div class="wrap" id="wrap"></div></main>
+</div>
+<script id="docdata" type="application/json">{"nav": [["Integración (API)", [["api", "Integración mediante API"]]]], "pages": {"api": {"title": "Integración mediante API", "crumb": "Integración (API)", "lead": "Integrá tus sistemas con la API pública de Zento.", "intro": "", "secs": [["Introducción", "introduccion", "<p>Esta guía describe la integración con la API pública de Zento. Usás credenciales de integración <code>X-Zento-Key<\/code> y <code>X-Zento-Secret<\/code> en las operaciones bajo <code>/v1<\/code>.<\/p><h4>Alcance<\/h4><ul><li>Comprobación de disponibilidad (health).<\/li><li>Obtención de token de sesión bancaria.<\/li><li>Consulta de saldo.<\/li><li>Envío de transferencias por CVU (lotes).<\/li><li>Consulta de estado y resultado de procesos batch.<\/li><li>Notificación de cierre de lote vía <code>callback_url<\/code> (firmada).<\/li><\/ul>"], ["Entornos y URL base", "entornos-y-url-base", "<p>Todas las rutas documentadas se anteponen a la URL base (sin barra final duplicada).<\/p><table><thead><tr><th>Entorno<\/th><th>URL base<\/th><th>Uso típico<\/th><\/tr><\/thead><tbody><tr><td>Producción<\/td><td><code>https://api.zento.lat<\/code><\/td><td>Integración productiva del cliente<\/td><\/tr><\/tbody><\/table>"], ["Modelo de seguridad", "modelo-de-seguridad", "<h4>Credenciales de la API (rutas /v1/*)<\/h4><p>Salvo los <em>health<\/em> públicos, cada llamada bajo <code>/v1/*<\/code> debe incluir:<\/p><ul><li><code>X-Zento-Key<\/code> — clave de integración provista por Zento.<\/li><li><code>X-Zento-Secret<\/code> — secreto asociado a la clave.<\/li><li><code>Content-Type: application/json<\/code> en solicitudes con cuerpo.<\/li><\/ul><p>Si faltan o son incorrectas: <code>HTTP 401<\/code> con cuerpo JSON (p. ej. <code>unauthorized<\/code>).<\/p><h4>Token de sesión bancaria<\/h4><p>Para balance, transferencias y procesos, además de los headers anteriores, se envía <code>Authorization: Bearer &lt;token&gt;<\/code> — el JWT devuelto por <code>POST /v1/auth/token<\/code>.<\/p><p>Reutilizá el token hasta su vencimiento (<code>expires_in<\/code> / <code>expires_in_millis<\/code>) y pedí uno nuevo cuando corresponda.<\/p>"], ["Health", "health", "<div class=\"ep-row\"><div class=\"ep-left\"><div class=\"ep\"><span class=\"m m-GET\">GET<\/span><code class=\"epath\">/health<\/code><\/div><p>Comprueba que el servicio responde. Endpoint público (no requiere credenciales).<\/p><h4>Campos de la respuesta<\/h4><table><thead><tr><th>Campo<\/th><th>Descripción<\/th><\/tr><\/thead><tbody><tr><td><code>status<\/code><\/td><td>Estado del servicio.<\/td><\/tr><tr><td><code>service<\/code><\/td><td>Identificador del servicio.<\/td><\/tr><tr><td><code>version<\/code><\/td><td>Versión publicada.<\/td><\/tr><\/tbody><\/table><p>Existe el equivalente versionado <code>GET /v1/health<\/code>.<\/p><\/div><div class=\"ep-right\"><div class=\"codetabs dark\"><div class=\"ctabs\"><div class=\"ctabs-scroll\"><button class=\"ctab on\" data-l=\"curl\">cURL<\/button><button class=\"ctab\" data-l=\"js\">JavaScript<\/button><button class=\"ctab\" data-l=\"py\">Python<\/button><button class=\"ctab\" data-l=\"go\">Go<\/button><button class=\"ctab\" data-l=\"cs\">C#<\/button><button class=\"ctab\" data-l=\"java\">Java<\/button><button class=\"ctab\" data-l=\"php\">PHP<\/button><button class=\"ctab\" data-l=\"ps\">PowerShell<\/button><\/div><button class=\"copybtn\" type=\"button\" title=\"Copiar\" aria-label=\"Copiar\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"9\" y=\"9\" width=\"13\" height=\"13\" rx=\"2\"/><path d=\"M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\"/><\/svg><\/button><\/div><div class=\"cpanes\"><pre class=\"cpane on\" data-l=\"curl\"><code>curl -X GET &#x27;https://api.zento.lat/health&#x27;<\/code><\/pre><pre class=\"cpane\" data-l=\"js\"><code>const res = await fetch(&quot;https://api.zento.lat/health&quot;, {\n  method: &quot;GET&quot;,\n  headers: {}\n});\nconst data = await res.json();<\/code><\/pre><pre class=\"cpane\" data-l=\"py\"><code>import requests\n\nresp = requests.get(\n    &quot;https://api.zento.lat/health&quot;,\n    headers={},\n)\ndata = resp.json()<\/code><\/pre><pre class=\"cpane\" data-l=\"go\"><code>package main\n\nimport (\n    &quot;net/http&quot;\n)\n\nfunc main() {\n    req, _ := http.NewRequest(&quot;GET&quot;, &quot;https://api.zento.lat/health&quot;, nil)\n    res, _ := http.DefaultClient.Do(req)\n    defer res.Body.Close()\n}<\/code><\/pre><pre class=\"cpane\" data-l=\"cs\"><code>using System.Net.Http;\nusing System.Text;\n\nvar client = new HttpClient();\nvar request = new HttpRequestMessage(HttpMethod.Get, &quot;https://api.zento.lat/health&quot;);\nvar response = await client.SendAsync(request);<\/code><\/pre><pre class=\"cpane\" data-l=\"java\"><code>HttpClient client = HttpClient.newHttpClient();\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(&quot;https://api.zento.lat/health&quot;))\n    .method(&quot;GET&quot;, HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse&lt;String&gt; response =\n    client.send(request, HttpResponse.BodyHandlers.ofString());<\/code><\/pre><pre class=\"cpane\" data-l=\"php\"><code>$ch = curl_init(&quot;https://api.zento.lat/health&quot;);\ncurl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\ncurl_setopt($ch, CURLOPT_CUSTOMREQUEST, &quot;GET&quot;);\ncurl_setopt($ch, CURLOPT_HTTPHEADER, [\n]);\n$response = curl_exec($ch);\ncurl_close($ch);<\/code><\/pre><pre class=\"cpane\" data-l=\"ps\"><code>$headers = @{\n}\n$response = Invoke-RestMethod -Uri &quot;https://api.zento.lat/health&quot; `\n    -Method GET -Headers $headers<\/code><\/pre><\/div><\/div><div class=\"codetabs dark respbox\"><div class=\"ctabs\"><span class=\"resp-label\">Respuesta<\/span><button class=\"copybtn\" type=\"button\" title=\"Copiar\" aria-label=\"Copiar\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"9\" y=\"9\" width=\"13\" height=\"13\" rx=\"2\"/><path d=\"M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\"/><\/svg><\/button><\/div><div class=\"cpanes\"><pre class=\"cpane on\"><code>{\n  &quot;status&quot;: &quot;ok&quot;,\n  &quot;service&quot;: &quot;zento-api&quot;,\n  &quot;version&quot;: &quot;1.1&quot;\n}<\/code><\/pre><\/div><\/div><\/div><\/div>"], ["Token de sesión", "token-de-sesion", "<div class=\"ep-row\"><div class=\"ep-left\"><div class=\"ep\"><span class=\"m m-POST\">POST<\/span><code class=\"epath\">/v1/auth/token<\/code><\/div><p>Obtené el token de sesión con tus credenciales de integración. El <code>token<\/code> devuelto se usa como <code>Authorization: Bearer<\/code> en balance, transferencias y procesos.<\/p><h4>Headers<\/h4><ul><li><code>X-Zento-Key<\/code> — clave de integración provista por Zento.<\/li><li><code>X-Zento-Secret<\/code> — secreto asociado a la clave.<\/li><li><code>Content-Type: application/json<\/code><\/li><\/ul><h4>Campos de la respuesta<\/h4><table><thead><tr><th>Campo<\/th><th>Descripción<\/th><\/tr><\/thead><tbody><tr><td><code>token<\/code><\/td><td>JWT de acceso para las siguientes llamadas.<\/td><\/tr><tr><td><code>token_type<\/code><\/td><td><code>new<\/code> si se generó uno nuevo.<\/td><\/tr><tr><td><code>expires_in / expires_in_millis<\/code><\/td><td>Validez del token (3600 s = 1 hora).<\/td><\/tr><tr><td><code>code<\/code><\/td><td><code>0200<\/code> indica éxito.<\/td><\/tr><\/tbody><\/table><p>Criterios de éxito: HTTP 200, <code>code 0200<\/code> y <code>token<\/code> presente.<\/p><\/div><div class=\"ep-right\"><div class=\"codetabs dark\"><div class=\"ctabs\"><div class=\"ctabs-scroll\"><button class=\"ctab on\" data-l=\"curl\">cURL<\/button><button class=\"ctab\" data-l=\"js\">JavaScript<\/button><button class=\"ctab\" data-l=\"py\">Python<\/button><button class=\"ctab\" data-l=\"go\">Go<\/button><button class=\"ctab\" data-l=\"cs\">C#<\/button><button class=\"ctab\" data-l=\"java\">Java<\/button><button class=\"ctab\" data-l=\"php\">PHP<\/button><button class=\"ctab\" data-l=\"ps\">PowerShell<\/button><\/div><button class=\"copybtn\" type=\"button\" title=\"Copiar\" aria-label=\"Copiar\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"9\" y=\"9\" width=\"13\" height=\"13\" rx=\"2\"/><path d=\"M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\"/><\/svg><\/button><\/div><div class=\"cpanes\"><pre class=\"cpane on\" data-l=\"curl\"><code>curl -X POST &#x27;https://api.zento.lat/v1/auth/token&#x27; \\\n  -H &#x27;X-Zento-Key: &lt;api_key_del_cliente&gt;&#x27; \\\n  -H &#x27;X-Zento-Secret: &lt;api_secret_del_cliente&gt;&#x27; \\\n  -H &#x27;Content-Type: application/json&#x27; \\\n  -d &#x27;{}&#x27;<\/code><\/pre><pre class=\"cpane\" data-l=\"js\"><code>const res = await fetch(&quot;https://api.zento.lat/v1/auth/token&quot;, {\n  method: &quot;POST&quot;,\n  headers: {\n    &quot;X-Zento-Key&quot;: &quot;&lt;api_key_del_cliente&gt;&quot;,\n    &quot;X-Zento-Secret&quot;: &quot;&lt;api_secret_del_cliente&gt;&quot;,\n    &quot;Content-Type&quot;: &quot;application/json&quot;\n  },\n  body: JSON.stringify({})\n});\nconst data = await res.json();<\/code><\/pre><pre class=\"cpane\" data-l=\"py\"><code>import requests\n\nresp = requests.post(\n    &quot;https://api.zento.lat/v1/auth/token&quot;,\n    headers={\n      &quot;X-Zento-Key&quot;: &quot;&lt;api_key_del_cliente&gt;&quot;,\n      &quot;X-Zento-Secret&quot;: &quot;&lt;api_secret_del_cliente&gt;&quot;\n    },\n    json={},\n)\ndata = resp.json()<\/code><\/pre><pre class=\"cpane\" data-l=\"go\"><code>package main\n\nimport (\n    &quot;bytes&quot;\n    &quot;net/http&quot;\n)\n\nfunc main() {\n    payload := bytes.NewBufferString(`{}`)\n    req, _ := http.NewRequest(&quot;POST&quot;, &quot;https://api.zento.lat/v1/auth/token&quot;, payload)\n    req.Header.Set(&quot;X-Zento-Key&quot;, &quot;&lt;api_key_del_cliente&gt;&quot;)\n    req.Header.Set(&quot;X-Zento-Secret&quot;, &quot;&lt;api_secret_del_cliente&gt;&quot;)\n    req.Header.Set(&quot;Content-Type&quot;, &quot;application/json&quot;)\n    res, _ := http.DefaultClient.Do(req)\n    defer res.Body.Close()\n}<\/code><\/pre><pre class=\"cpane\" data-l=\"cs\"><code>using System.Net.Http;\nusing System.Text;\n\nvar client = new HttpClient();\nvar request = new HttpRequestMessage(HttpMethod.Post, &quot;https://api.zento.lat/v1/auth/token&quot;);\nrequest.Headers.Add(&quot;X-Zento-Key&quot;, &quot;&lt;api_key_del_cliente&gt;&quot;);\nrequest.Headers.Add(&quot;X-Zento-Secret&quot;, &quot;&lt;api_secret_del_cliente&gt;&quot;);\nrequest.Content = new StringContent(@&quot;{}&quot;, Encoding.UTF8, &quot;application/json&quot;);\nvar response = await client.SendAsync(request);<\/code><\/pre><pre class=\"cpane\" data-l=\"java\"><code>HttpClient client = HttpClient.newHttpClient();\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(&quot;https://api.zento.lat/v1/auth/token&quot;))\n    .header(&quot;X-Zento-Key&quot;, &quot;&lt;api_key_del_cliente&gt;&quot;)\n    .header(&quot;X-Zento-Secret&quot;, &quot;&lt;api_secret_del_cliente&gt;&quot;)\n    .header(&quot;Content-Type&quot;, &quot;application/json&quot;)\n    .method(&quot;POST&quot;, HttpRequest.BodyPublishers.ofString(&quot;&quot;&quot;\n{}\n&quot;&quot;&quot;))\n    .build();\nHttpResponse&lt;String&gt; response =\n    client.send(request, HttpResponse.BodyHandlers.ofString());<\/code><\/pre><pre class=\"cpane\" data-l=\"php\"><code>$ch = curl_init(&quot;https://api.zento.lat/v1/auth/token&quot;);\ncurl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\ncurl_setopt($ch, CURLOPT_CUSTOMREQUEST, &quot;POST&quot;);\ncurl_setopt($ch, CURLOPT_HTTPHEADER, [\n    &quot;X-Zento-Key: &lt;api_key_del_cliente&gt;&quot;,\n    &quot;X-Zento-Secret: &lt;api_secret_del_cliente&gt;&quot;,\n    &quot;Content-Type: application/json&quot;,\n]);\ncurl_setopt($ch, CURLOPT_POSTFIELDS, &#x27;{}&#x27;);\n$response = curl_exec($ch);\ncurl_close($ch);<\/code><\/pre><pre class=\"cpane\" data-l=\"ps\"><code>$headers = @{\n    &quot;X-Zento-Key&quot; = &quot;&lt;api_key_del_cliente&gt;&quot;\n    &quot;X-Zento-Secret&quot; = &quot;&lt;api_secret_del_cliente&gt;&quot;\n    &quot;Content-Type&quot; = &quot;application/json&quot;\n}\n$body = @&#x27;\n{}\n&#x27;@\n$response = Invoke-RestMethod -Uri &quot;https://api.zento.lat/v1/auth/token&quot; `\n    -Method POST -Headers $headers -Body $body<\/code><\/pre><\/div><\/div><div class=\"codetabs dark respbox\"><div class=\"ctabs\"><span class=\"resp-label\">Respuesta<\/span><button class=\"copybtn\" type=\"button\" title=\"Copiar\" aria-label=\"Copiar\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"9\" y=\"9\" width=\"13\" height=\"13\" rx=\"2\"/><path d=\"M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\"/><\/svg><\/button><\/div><div class=\"cpanes\"><pre class=\"cpane on\"><code>{\n  &quot;code&quot;: &quot;0200&quot;,\n  &quot;description&quot;: &quot;ok&quot;,\n  &quot;token&quot;: &quot;eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...&quot;,\n  &quot;token_type&quot;: &quot;new&quot;,\n  &quot;expires_in&quot;: 3600,\n  &quot;expires_in_millis&quot;: 3600000,\n  &quot;utcnow&quot;: &quot;Mon, 23 Mar 2026 13:29:40 GMT&quot;\n}<\/code><\/pre><\/div><\/div><\/div><\/div>"], ["Balance", "balance", "<div class=\"ep-row\"><div class=\"ep-left\"><div class=\"ep\"><span class=\"m m-POST\">POST<\/span><code class=\"epath\">/v1/accounts/balance<\/code><\/div><p>Consultá el saldo de una cuenta.<\/p><h4>Headers<\/h4><ul><li><code>X-Zento-Key<\/code> — clave de integración provista por Zento.<\/li><li><code>X-Zento-Secret<\/code> — secreto asociado a la clave.<\/li><li><code>Authorization<\/code> — <code>Bearer &lt;token&gt;<\/code> — JWT devuelto por <code>POST /v1/auth/token<\/code>.<\/li><li><code>Content-Type: application/json<\/code><\/li><\/ul><h4>Cuerpo (body)<\/h4><table><thead><tr><th>Campo<\/th><th>Descripción<\/th><\/tr><\/thead><tbody><tr><td><code>account<\/code><\/td><td>Identificador de cuenta según acuerdo operativo.<\/td><\/tr><tr><td><code>trace<\/code><\/td><td>Numérico. Trazabilidad (p. ej. timestamp en milisegundos).<\/td><\/tr><tr><td><code>retrieval<\/code><\/td><td>Identificador libre de la consulta.<\/td><\/tr><\/tbody><\/table><h4>Campos de la respuesta<\/h4><table><thead><tr><th>Campo<\/th><th>Descripción<\/th><\/tr><\/thead><tbody><tr><td><code>available_for_purchases<\/code><\/td><td>Saldo disponible de la cuenta.<\/td><\/tr><tr><td><code>authorization_code<\/code><\/td><td>Código de autorización.<\/td><\/tr><tr><td><code>code<\/code><\/td><td><code>2200<\/code> indica éxito.<\/td><\/tr><\/tbody><\/table><p>Usá exactamente <code>account<\/code>, <code>trace<\/code> y <code>retrieval<\/code>. Otros nombres de campo pueden producir rechazo <code>0400<\/code>.<\/p><\/div><div class=\"ep-right\"><div class=\"codetabs dark\"><div class=\"ctabs\"><div class=\"ctabs-scroll\"><button class=\"ctab on\" data-l=\"curl\">cURL<\/button><button class=\"ctab\" data-l=\"js\">JavaScript<\/button><button class=\"ctab\" data-l=\"py\">Python<\/button><button class=\"ctab\" data-l=\"go\">Go<\/button><button class=\"ctab\" data-l=\"cs\">C#<\/button><button class=\"ctab\" data-l=\"java\">Java<\/button><button class=\"ctab\" data-l=\"php\">PHP<\/button><button class=\"ctab\" data-l=\"ps\">PowerShell<\/button><\/div><button class=\"copybtn\" type=\"button\" title=\"Copiar\" aria-label=\"Copiar\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"9\" y=\"9\" width=\"13\" height=\"13\" rx=\"2\"/><path d=\"M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\"/><\/svg><\/button><\/div><div class=\"cpanes\"><pre class=\"cpane on\" data-l=\"curl\"><code>curl -X POST &#x27;https://api.zento.lat/v1/accounts/balance&#x27; \\\n  -H &#x27;X-Zento-Key: &lt;api_key_del_cliente&gt;&#x27; \\\n  -H &#x27;X-Zento-Secret: &lt;api_secret_del_cliente&gt;&#x27; \\\n  -H &#x27;Authorization: Bearer &lt;token_de_sesion&gt;&#x27; \\\n  -H &#x27;Content-Type: application/json&#x27; \\\n  -d &#x27;{\n  &quot;account&quot;: &quot;&lt;numero_de_cuenta&gt;&quot;,\n  &quot;trace&quot;: 174129300001,\n  &quot;retrieval&quot;: &quot;BAL000001&quot;\n}&#x27;<\/code><\/pre><pre class=\"cpane\" data-l=\"js\"><code>const res = await fetch(&quot;https://api.zento.lat/v1/accounts/balance&quot;, {\n  method: &quot;POST&quot;,\n  headers: {\n    &quot;X-Zento-Key&quot;: &quot;&lt;api_key_del_cliente&gt;&quot;,\n    &quot;X-Zento-Secret&quot;: &quot;&lt;api_secret_del_cliente&gt;&quot;,\n    &quot;Authorization&quot;: &quot;Bearer &lt;token_de_sesion&gt;&quot;,\n    &quot;Content-Type&quot;: &quot;application/json&quot;\n  },\n  body: JSON.stringify({\n    &quot;account&quot;: &quot;&lt;numero_de_cuenta&gt;&quot;,\n    &quot;trace&quot;: 174129300001,\n    &quot;retrieval&quot;: &quot;BAL000001&quot;\n  })\n});\nconst data = await res.json();<\/code><\/pre><pre class=\"cpane\" data-l=\"py\"><code>import requests\n\nresp = requests.post(\n    &quot;https://api.zento.lat/v1/accounts/balance&quot;,\n    headers={\n      &quot;X-Zento-Key&quot;: &quot;&lt;api_key_del_cliente&gt;&quot;,\n      &quot;X-Zento-Secret&quot;: &quot;&lt;api_secret_del_cliente&gt;&quot;,\n      &quot;Authorization&quot;: &quot;Bearer &lt;token_de_sesion&gt;&quot;\n    },\n    json={\n      &quot;account&quot;: &quot;&lt;numero_de_cuenta&gt;&quot;,\n      &quot;trace&quot;: 174129300001,\n      &quot;retrieval&quot;: &quot;BAL000001&quot;\n    },\n)\ndata = resp.json()<\/code><\/pre><pre class=\"cpane\" data-l=\"go\"><code>package main\n\nimport (\n    &quot;bytes&quot;\n    &quot;net/http&quot;\n)\n\nfunc main() {\n    payload := bytes.NewBufferString(`{\n  &quot;account&quot;: &quot;&lt;numero_de_cuenta&gt;&quot;,\n  &quot;trace&quot;: 174129300001,\n  &quot;retrieval&quot;: &quot;BAL000001&quot;\n}`)\n    req, _ := http.NewRequest(&quot;POST&quot;, &quot;https://api.zento.lat/v1/accounts/balance&quot;, payload)\n    req.Header.Set(&quot;X-Zento-Key&quot;, &quot;&lt;api_key_del_cliente&gt;&quot;)\n    req.Header.Set(&quot;X-Zento-Secret&quot;, &quot;&lt;api_secret_del_cliente&gt;&quot;)\n    req.Header.Set(&quot;Authorization&quot;, &quot;Bearer &lt;token_de_sesion&gt;&quot;)\n    req.Header.Set(&quot;Content-Type&quot;, &quot;application/json&quot;)\n    res, _ := http.DefaultClient.Do(req)\n    defer res.Body.Close()\n}<\/code><\/pre><pre class=\"cpane\" data-l=\"cs\"><code>using System.Net.Http;\nusing System.Text;\n\nvar client = new HttpClient();\nvar request = new HttpRequestMessage(HttpMethod.Post, &quot;https://api.zento.lat/v1/accounts/balance&quot;);\nrequest.Headers.Add(&quot;X-Zento-Key&quot;, &quot;&lt;api_key_del_cliente&gt;&quot;);\nrequest.Headers.Add(&quot;X-Zento-Secret&quot;, &quot;&lt;api_secret_del_cliente&gt;&quot;);\nrequest.Headers.Add(&quot;Authorization&quot;, &quot;Bearer &lt;token_de_sesion&gt;&quot;);\nrequest.Content = new StringContent(@&quot;{\n  &quot;&quot;account&quot;&quot;: &quot;&quot;&lt;numero_de_cuenta&gt;&quot;&quot;,\n  &quot;&quot;trace&quot;&quot;: 174129300001,\n  &quot;&quot;retrieval&quot;&quot;: &quot;&quot;BAL000001&quot;&quot;\n}&quot;, Encoding.UTF8, &quot;application/json&quot;);\nvar response = await client.SendAsync(request);<\/code><\/pre><pre class=\"cpane\" data-l=\"java\"><code>HttpClient client = HttpClient.newHttpClient();\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(&quot;https://api.zento.lat/v1/accounts/balance&quot;))\n    .header(&quot;X-Zento-Key&quot;, &quot;&lt;api_key_del_cliente&gt;&quot;)\n    .header(&quot;X-Zento-Secret&quot;, &quot;&lt;api_secret_del_cliente&gt;&quot;)\n    .header(&quot;Authorization&quot;, &quot;Bearer &lt;token_de_sesion&gt;&quot;)\n    .header(&quot;Content-Type&quot;, &quot;application/json&quot;)\n    .method(&quot;POST&quot;, HttpRequest.BodyPublishers.ofString(&quot;&quot;&quot;\n{\n  &quot;account&quot;: &quot;&lt;numero_de_cuenta&gt;&quot;,\n  &quot;trace&quot;: 174129300001,\n  &quot;retrieval&quot;: &quot;BAL000001&quot;\n}\n&quot;&quot;&quot;))\n    .build();\nHttpResponse&lt;String&gt; response =\n    client.send(request, HttpResponse.BodyHandlers.ofString());<\/code><\/pre><pre class=\"cpane\" data-l=\"php\"><code>$ch = curl_init(&quot;https://api.zento.lat/v1/accounts/balance&quot;);\ncurl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\ncurl_setopt($ch, CURLOPT_CUSTOMREQUEST, &quot;POST&quot;);\ncurl_setopt($ch, CURLOPT_HTTPHEADER, [\n    &quot;X-Zento-Key: &lt;api_key_del_cliente&gt;&quot;,\n    &quot;X-Zento-Secret: &lt;api_secret_del_cliente&gt;&quot;,\n    &quot;Authorization: Bearer &lt;token_de_sesion&gt;&quot;,\n    &quot;Content-Type: application/json&quot;,\n]);\ncurl_setopt($ch, CURLOPT_POSTFIELDS, &#x27;{\n  &quot;account&quot;: &quot;&lt;numero_de_cuenta&gt;&quot;,\n  &quot;trace&quot;: 174129300001,\n  &quot;retrieval&quot;: &quot;BAL000001&quot;\n}&#x27;);\n$response = curl_exec($ch);\ncurl_close($ch);<\/code><\/pre><pre class=\"cpane\" data-l=\"ps\"><code>$headers = @{\n    &quot;X-Zento-Key&quot; = &quot;&lt;api_key_del_cliente&gt;&quot;\n    &quot;X-Zento-Secret&quot; = &quot;&lt;api_secret_del_cliente&gt;&quot;\n    &quot;Authorization&quot; = &quot;Bearer &lt;token_de_sesion&gt;&quot;\n    &quot;Content-Type&quot; = &quot;application/json&quot;\n}\n$body = @&#x27;\n{\n  &quot;account&quot;: &quot;&lt;numero_de_cuenta&gt;&quot;,\n  &quot;trace&quot;: 174129300001,\n  &quot;retrieval&quot;: &quot;BAL000001&quot;\n}\n&#x27;@\n$response = Invoke-RestMethod -Uri &quot;https://api.zento.lat/v1/accounts/balance&quot; `\n    -Method POST -Headers $headers -Body $body<\/code><\/pre><\/div><\/div><div class=\"codetabs dark respbox\"><div class=\"ctabs\"><span class=\"resp-label\">Respuesta<\/span><button class=\"copybtn\" type=\"button\" title=\"Copiar\" aria-label=\"Copiar\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"9\" y=\"9\" width=\"13\" height=\"13\" rx=\"2\"/><path d=\"M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\"/><\/svg><\/button><\/div><div class=\"cpanes\"><pre class=\"cpane on\"><code>{\n  &quot;code&quot;: &quot;2200&quot;,\n  &quot;data&quot;: {\n    &quot;authorization_code&quot;: &quot;065727&quot;,\n    &quot;available_cash_advances&quot;: 0,\n    &quot;available_for_purchases&quot;: 9904,\n    &quot;available_installments&quot;: 0,\n    &quot;available_loans&quot;: 0,\n    &quot;balance&quot;: 0,\n    &quot;dollar_balance&quot;: 0,\n    &quot;minimum_payment&quot;: 0,\n    &quot;reserve_balance&quot;: 0\n  },\n  &quot;description&quot;: &quot;ok&quot;,\n  &quot;request_id&quot;: &quot;20260323102941975453&quot;\n}<\/code><\/pre><\/div><\/div><\/div><\/div>"], ["Transferencias por CVU", "transferencias-por-cvu", "<div class=\"ep-row\"><div class=\"ep-left\"><div class=\"ep\"><span class=\"m m-POST\">POST<\/span><code class=\"epath\">/v1/transfers/cvu<\/code><\/div><p>Enviá una o varias transferencias en un lote.<\/p><h4>Headers<\/h4><ul><li><code>X-Zento-Key<\/code> — clave de integración provista por Zento.<\/li><li><code>X-Zento-Secret<\/code> — secreto asociado a la clave.<\/li><li><code>Authorization<\/code> — <code>Bearer &lt;token&gt;<\/code> — JWT devuelto por <code>POST /v1/auth/token<\/code>.<\/li><li><code>Content-Type: application/json<\/code><\/li><\/ul><h4>Cuerpo (body)<\/h4><table><thead><tr><th>Campo<\/th><th>Descripción<\/th><\/tr><\/thead><tbody><tr><td><code>process_id<\/code><\/td><td>UUID único del lote (reutilizarlo puede devolver <code>0412<\/code>).<\/td><\/tr><tr><td><code>transaction_count<\/code><\/td><td>Debe coincidir con la cantidad de elementos de <code>data<\/code>.<\/td><\/tr><tr><td><code>initial_datetime<\/code><\/td><td>ISO 8601 con zona; offset con dos puntos (ej. <code>-03:00<\/code>).<\/td><\/tr><tr><td><code>callback_url<\/code><\/td><td>HTTPS pública que acepte <code>POST<\/code>.<\/td><\/tr><tr><td><code>data[].transaction_id<\/code><\/td><td>Hasta 12 caracteres salvo acuerdo distinto.<\/td><\/tr><tr><td><code>data[].from_cvu / to_cvu<\/code><\/td><td>CVU de origen y destino (22 dígitos).<\/td><\/tr><tr><td><code>data[].amount<\/code><\/td><td>Monto.<\/td><\/tr><tr><td><code>data[].concept<\/code><\/td><td><code>VAR<\/code> para transferencias generales.<\/td><\/tr><\/tbody><\/table><h4>Campos de la respuesta<\/h4><table><thead><tr><th>Campo<\/th><th>Descripción<\/th><\/tr><\/thead><tbody><tr><td><code>code<\/code><\/td><td><code>0201<\/code> = lote aceptado para procesamiento.<\/td><\/tr><tr><td><code>process_id<\/code><\/td><td>Guardalo para consultar estado y resultado.<\/td><\/tr><\/tbody><\/table><p>Resultado final: polling (<code>/v1/processes/status<\/code>, <code>/v1/processes/{id}/result<\/code>) y/o callback.<\/p><\/div><div class=\"ep-right\"><div class=\"codetabs dark\"><div class=\"ctabs\"><div class=\"ctabs-scroll\"><button class=\"ctab on\" data-l=\"curl\">cURL<\/button><button class=\"ctab\" data-l=\"js\">JavaScript<\/button><button class=\"ctab\" data-l=\"py\">Python<\/button><button class=\"ctab\" data-l=\"go\">Go<\/button><button class=\"ctab\" data-l=\"cs\">C#<\/button><button class=\"ctab\" data-l=\"java\">Java<\/button><button class=\"ctab\" data-l=\"php\">PHP<\/button><button class=\"ctab\" data-l=\"ps\">PowerShell<\/button><\/div><button class=\"copybtn\" type=\"button\" title=\"Copiar\" aria-label=\"Copiar\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"9\" y=\"9\" width=\"13\" height=\"13\" rx=\"2\"/><path d=\"M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\"/><\/svg><\/button><\/div><div class=\"cpanes\"><pre class=\"cpane on\" data-l=\"curl\"><code>curl -X POST &#x27;https://api.zento.lat/v1/transfers/cvu&#x27; \\\n  -H &#x27;X-Zento-Key: &lt;api_key_del_cliente&gt;&#x27; \\\n  -H &#x27;X-Zento-Secret: &lt;api_secret_del_cliente&gt;&#x27; \\\n  -H &#x27;Authorization: Bearer &lt;token_de_sesion&gt;&#x27; \\\n  -H &#x27;Content-Type: application/json&#x27; \\\n  -d &#x27;{\n  &quot;callback_url&quot;: &quot;https://su-dominio.com/ruta/webhook&quot;,\n  &quot;process_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,\n  &quot;transaction_count&quot;: 1,\n  &quot;initial_datetime&quot;: &quot;2026-03-23T10:29:42-03:00&quot;,\n  &quot;data&quot;: [\n    {\n      &quot;transaction_id&quot;: &quot;TX00000001&quot;,\n      &quot;from_cvu&quot;: &quot;&lt;cvu_origen_22_digitos&gt;&quot;,\n      &quot;to_cvu&quot;: &quot;&lt;cvu_destino_22_digitos&gt;&quot;,\n      &quot;amount&quot;: 1.0,\n      &quot;concept&quot;: &quot;VAR&quot;,\n      &quot;description&quot;: &quot;Motivo u operación&quot;\n    }\n  ]\n}&#x27;<\/code><\/pre><pre class=\"cpane\" data-l=\"js\"><code>const res = await fetch(&quot;https://api.zento.lat/v1/transfers/cvu&quot;, {\n  method: &quot;POST&quot;,\n  headers: {\n    &quot;X-Zento-Key&quot;: &quot;&lt;api_key_del_cliente&gt;&quot;,\n    &quot;X-Zento-Secret&quot;: &quot;&lt;api_secret_del_cliente&gt;&quot;,\n    &quot;Authorization&quot;: &quot;Bearer &lt;token_de_sesion&gt;&quot;,\n    &quot;Content-Type&quot;: &quot;application/json&quot;\n  },\n  body: JSON.stringify({\n    &quot;callback_url&quot;: &quot;https://su-dominio.com/ruta/webhook&quot;,\n    &quot;process_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,\n    &quot;transaction_count&quot;: 1,\n    &quot;initial_datetime&quot;: &quot;2026-03-23T10:29:42-03:00&quot;,\n    &quot;data&quot;: [\n      {\n        &quot;transaction_id&quot;: &quot;TX00000001&quot;,\n        &quot;from_cvu&quot;: &quot;&lt;cvu_origen_22_digitos&gt;&quot;,\n        &quot;to_cvu&quot;: &quot;&lt;cvu_destino_22_digitos&gt;&quot;,\n        &quot;amount&quot;: 1.0,\n        &quot;concept&quot;: &quot;VAR&quot;,\n        &quot;description&quot;: &quot;Motivo u operación&quot;\n      }\n    ]\n  })\n});\nconst data = await res.json();<\/code><\/pre><pre class=\"cpane\" data-l=\"py\"><code>import requests\n\nresp = requests.post(\n    &quot;https://api.zento.lat/v1/transfers/cvu&quot;,\n    headers={\n      &quot;X-Zento-Key&quot;: &quot;&lt;api_key_del_cliente&gt;&quot;,\n      &quot;X-Zento-Secret&quot;: &quot;&lt;api_secret_del_cliente&gt;&quot;,\n      &quot;Authorization&quot;: &quot;Bearer &lt;token_de_sesion&gt;&quot;\n    },\n    json={\n      &quot;callback_url&quot;: &quot;https://su-dominio.com/ruta/webhook&quot;,\n      &quot;process_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,\n      &quot;transaction_count&quot;: 1,\n      &quot;initial_datetime&quot;: &quot;2026-03-23T10:29:42-03:00&quot;,\n      &quot;data&quot;: [\n        {\n          &quot;transaction_id&quot;: &quot;TX00000001&quot;,\n          &quot;from_cvu&quot;: &quot;&lt;cvu_origen_22_digitos&gt;&quot;,\n          &quot;to_cvu&quot;: &quot;&lt;cvu_destino_22_digitos&gt;&quot;,\n          &quot;amount&quot;: 1.0,\n          &quot;concept&quot;: &quot;VAR&quot;,\n          &quot;description&quot;: &quot;Motivo u operación&quot;\n        }\n      ]\n    },\n)\ndata = resp.json()<\/code><\/pre><pre class=\"cpane\" data-l=\"go\"><code>package main\n\nimport (\n    &quot;bytes&quot;\n    &quot;net/http&quot;\n)\n\nfunc main() {\n    payload := bytes.NewBufferString(`{\n  &quot;callback_url&quot;: &quot;https://su-dominio.com/ruta/webhook&quot;,\n  &quot;process_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,\n  &quot;transaction_count&quot;: 1,\n  &quot;initial_datetime&quot;: &quot;2026-03-23T10:29:42-03:00&quot;,\n  &quot;data&quot;: [\n    {\n      &quot;transaction_id&quot;: &quot;TX00000001&quot;,\n      &quot;from_cvu&quot;: &quot;&lt;cvu_origen_22_digitos&gt;&quot;,\n      &quot;to_cvu&quot;: &quot;&lt;cvu_destino_22_digitos&gt;&quot;,\n      &quot;amount&quot;: 1.0,\n      &quot;concept&quot;: &quot;VAR&quot;,\n      &quot;description&quot;: &quot;Motivo u operación&quot;\n    }\n  ]\n}`)\n    req, _ := http.NewRequest(&quot;POST&quot;, &quot;https://api.zento.lat/v1/transfers/cvu&quot;, payload)\n    req.Header.Set(&quot;X-Zento-Key&quot;, &quot;&lt;api_key_del_cliente&gt;&quot;)\n    req.Header.Set(&quot;X-Zento-Secret&quot;, &quot;&lt;api_secret_del_cliente&gt;&quot;)\n    req.Header.Set(&quot;Authorization&quot;, &quot;Bearer &lt;token_de_sesion&gt;&quot;)\n    req.Header.Set(&quot;Content-Type&quot;, &quot;application/json&quot;)\n    res, _ := http.DefaultClient.Do(req)\n    defer res.Body.Close()\n}<\/code><\/pre><pre class=\"cpane\" data-l=\"cs\"><code>using System.Net.Http;\nusing System.Text;\n\nvar client = new HttpClient();\nvar request = new HttpRequestMessage(HttpMethod.Post, &quot;https://api.zento.lat/v1/transfers/cvu&quot;);\nrequest.Headers.Add(&quot;X-Zento-Key&quot;, &quot;&lt;api_key_del_cliente&gt;&quot;);\nrequest.Headers.Add(&quot;X-Zento-Secret&quot;, &quot;&lt;api_secret_del_cliente&gt;&quot;);\nrequest.Headers.Add(&quot;Authorization&quot;, &quot;Bearer &lt;token_de_sesion&gt;&quot;);\nrequest.Content = new StringContent(@&quot;{\n  &quot;&quot;callback_url&quot;&quot;: &quot;&quot;https://su-dominio.com/ruta/webhook&quot;&quot;,\n  &quot;&quot;process_id&quot;&quot;: &quot;&quot;550e8400-e29b-41d4-a716-446655440000&quot;&quot;,\n  &quot;&quot;transaction_count&quot;&quot;: 1,\n  &quot;&quot;initial_datetime&quot;&quot;: &quot;&quot;2026-03-23T10:29:42-03:00&quot;&quot;,\n  &quot;&quot;data&quot;&quot;: [\n    {\n      &quot;&quot;transaction_id&quot;&quot;: &quot;&quot;TX00000001&quot;&quot;,\n      &quot;&quot;from_cvu&quot;&quot;: &quot;&quot;&lt;cvu_origen_22_digitos&gt;&quot;&quot;,\n      &quot;&quot;to_cvu&quot;&quot;: &quot;&quot;&lt;cvu_destino_22_digitos&gt;&quot;&quot;,\n      &quot;&quot;amount&quot;&quot;: 1.0,\n      &quot;&quot;concept&quot;&quot;: &quot;&quot;VAR&quot;&quot;,\n      &quot;&quot;description&quot;&quot;: &quot;&quot;Motivo u operación&quot;&quot;\n    }\n  ]\n}&quot;, Encoding.UTF8, &quot;application/json&quot;);\nvar response = await client.SendAsync(request);<\/code><\/pre><pre class=\"cpane\" data-l=\"java\"><code>HttpClient client = HttpClient.newHttpClient();\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(&quot;https://api.zento.lat/v1/transfers/cvu&quot;))\n    .header(&quot;X-Zento-Key&quot;, &quot;&lt;api_key_del_cliente&gt;&quot;)\n    .header(&quot;X-Zento-Secret&quot;, &quot;&lt;api_secret_del_cliente&gt;&quot;)\n    .header(&quot;Authorization&quot;, &quot;Bearer &lt;token_de_sesion&gt;&quot;)\n    .header(&quot;Content-Type&quot;, &quot;application/json&quot;)\n    .method(&quot;POST&quot;, HttpRequest.BodyPublishers.ofString(&quot;&quot;&quot;\n{\n  &quot;callback_url&quot;: &quot;https://su-dominio.com/ruta/webhook&quot;,\n  &quot;process_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,\n  &quot;transaction_count&quot;: 1,\n  &quot;initial_datetime&quot;: &quot;2026-03-23T10:29:42-03:00&quot;,\n  &quot;data&quot;: [\n    {\n      &quot;transaction_id&quot;: &quot;TX00000001&quot;,\n      &quot;from_cvu&quot;: &quot;&lt;cvu_origen_22_digitos&gt;&quot;,\n      &quot;to_cvu&quot;: &quot;&lt;cvu_destino_22_digitos&gt;&quot;,\n      &quot;amount&quot;: 1.0,\n      &quot;concept&quot;: &quot;VAR&quot;,\n      &quot;description&quot;: &quot;Motivo u operación&quot;\n    }\n  ]\n}\n&quot;&quot;&quot;))\n    .build();\nHttpResponse&lt;String&gt; response =\n    client.send(request, HttpResponse.BodyHandlers.ofString());<\/code><\/pre><pre class=\"cpane\" data-l=\"php\"><code>$ch = curl_init(&quot;https://api.zento.lat/v1/transfers/cvu&quot;);\ncurl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\ncurl_setopt($ch, CURLOPT_CUSTOMREQUEST, &quot;POST&quot;);\ncurl_setopt($ch, CURLOPT_HTTPHEADER, [\n    &quot;X-Zento-Key: &lt;api_key_del_cliente&gt;&quot;,\n    &quot;X-Zento-Secret: &lt;api_secret_del_cliente&gt;&quot;,\n    &quot;Authorization: Bearer &lt;token_de_sesion&gt;&quot;,\n    &quot;Content-Type: application/json&quot;,\n]);\ncurl_setopt($ch, CURLOPT_POSTFIELDS, &#x27;{\n  &quot;callback_url&quot;: &quot;https://su-dominio.com/ruta/webhook&quot;,\n  &quot;process_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,\n  &quot;transaction_count&quot;: 1,\n  &quot;initial_datetime&quot;: &quot;2026-03-23T10:29:42-03:00&quot;,\n  &quot;data&quot;: [\n    {\n      &quot;transaction_id&quot;: &quot;TX00000001&quot;,\n      &quot;from_cvu&quot;: &quot;&lt;cvu_origen_22_digitos&gt;&quot;,\n      &quot;to_cvu&quot;: &quot;&lt;cvu_destino_22_digitos&gt;&quot;,\n      &quot;amount&quot;: 1.0,\n      &quot;concept&quot;: &quot;VAR&quot;,\n      &quot;description&quot;: &quot;Motivo u operación&quot;\n    }\n  ]\n}&#x27;);\n$response = curl_exec($ch);\ncurl_close($ch);<\/code><\/pre><pre class=\"cpane\" data-l=\"ps\"><code>$headers = @{\n    &quot;X-Zento-Key&quot; = &quot;&lt;api_key_del_cliente&gt;&quot;\n    &quot;X-Zento-Secret&quot; = &quot;&lt;api_secret_del_cliente&gt;&quot;\n    &quot;Authorization&quot; = &quot;Bearer &lt;token_de_sesion&gt;&quot;\n    &quot;Content-Type&quot; = &quot;application/json&quot;\n}\n$body = @&#x27;\n{\n  &quot;callback_url&quot;: &quot;https://su-dominio.com/ruta/webhook&quot;,\n  &quot;process_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,\n  &quot;transaction_count&quot;: 1,\n  &quot;initial_datetime&quot;: &quot;2026-03-23T10:29:42-03:00&quot;,\n  &quot;data&quot;: [\n    {\n      &quot;transaction_id&quot;: &quot;TX00000001&quot;,\n      &quot;from_cvu&quot;: &quot;&lt;cvu_origen_22_digitos&gt;&quot;,\n      &quot;to_cvu&quot;: &quot;&lt;cvu_destino_22_digitos&gt;&quot;,\n      &quot;amount&quot;: 1.0,\n      &quot;concept&quot;: &quot;VAR&quot;,\n      &quot;description&quot;: &quot;Motivo u operación&quot;\n    }\n  ]\n}\n&#x27;@\n$response = Invoke-RestMethod -Uri &quot;https://api.zento.lat/v1/transfers/cvu&quot; `\n    -Method POST -Headers $headers -Body $body<\/code><\/pre><\/div><\/div><div class=\"codetabs dark respbox\"><div class=\"ctabs\"><span class=\"resp-label\">Respuesta<\/span><button class=\"copybtn\" type=\"button\" title=\"Copiar\" aria-label=\"Copiar\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"9\" y=\"9\" width=\"13\" height=\"13\" rx=\"2\"/><path d=\"M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\"/><\/svg><\/button><\/div><div class=\"cpanes\"><pre class=\"cpane on\"><code>{\n  &quot;code&quot;: &quot;0201&quot;,\n  &quot;description&quot;: &quot;ok&quot;,\n  &quot;process_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,\n  &quot;request_id&quot;: &quot;20260323102943401405&quot;,\n  &quot;transaction_count&quot;: 1\n}<\/code><\/pre><\/div><\/div><\/div><\/div>"], ["Callback de finalización (firmado)", "callback-de-finalizacion-firmado", "<div class=\"ep-row\"><div class=\"ep-left\"><p>Al cerrar el lote, Zento envía un <code>POST<\/code> a tu <code>callback_url<\/code>.<\/p><h4>Headers del callback<\/h4><ul><li><code>Content-Type: application/json<\/code><\/li><li><code>X-Webhook-Timestamp<\/code> — Unix (segundos), usado en la firma.<\/li><li><code>X-Webhook-Signature<\/code> — HMAC-SHA256 en hexadecimal.<\/li><\/ul><p><strong>Firma:<\/strong> <code>HMAC-SHA256( timestamp + \".\" + body_crudo , webhook_secret )<\/code>. El <code>webhook_secret<\/code> lo entrega Zento al habilitar notificaciones. Validá la firma sobre el body crudo antes de responder 2xx.<\/p><p>El <code>status<\/code> del callback es <code>completed<\/code> o <code>failed<\/code> (no confundir con <code>finished<\/code> del endpoint de estado).<\/p><\/div><div class=\"ep-right\"><div class=\"codetabs dark respbox\"><div class=\"ctabs\"><span class=\"resp-label\">Payload del callback<\/span><button class=\"copybtn\" type=\"button\" title=\"Copiar\" aria-label=\"Copiar\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"9\" y=\"9\" width=\"13\" height=\"13\" rx=\"2\"/><path d=\"M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\"/><\/svg><\/button><\/div><div class=\"cpanes\"><pre class=\"cpane on\"><code>{\n  &quot;status&quot;: &quot;completed&quot;,\n  &quot;process_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440001&quot;,\n  &quot;transaction_id&quot;: &quot;TX00000001&quot;,\n  &quot;transaction_count&quot;: 1,\n  &quot;transaction_success_count&quot;: 1,\n  &quot;transaction_fail_count&quot;: 0,\n  &quot;process_initial_date&quot;: &quot;2026-03-20T15:20:41.752Z&quot;,\n  &quot;process_ending_time&quot;: &quot;2026-03-20T15:20:41.968Z&quot;,\n  &quot;webhook_received&quot;: true,\n  &quot;webhook_received_at&quot;: &quot;2026-03-20T15:20:41.968Z&quot;,\n  &quot;data&quot;: [\n    {\n      &quot;response_code&quot;: &quot;0200&quot;,\n      &quot;response_description&quot;: &quot;ok&quot;,\n      &quot;amount&quot;: &quot;1.00&quot;,\n      &quot;concept&quot;: &quot;VAR&quot;\n    }\n  ]\n}<\/code><\/pre><\/div><\/div><\/div><\/div>"], ["Estado de procesos", "estado-de-procesos", "<div class=\"ep-row\"><div class=\"ep-left\"><div class=\"ep\"><span class=\"m m-POST\">POST<\/span><code class=\"epath\">/v1/processes/status<\/code><\/div><p>Contadores y estado del lote.<\/p><h4>Headers<\/h4><ul><li><code>X-Zento-Key<\/code> — clave de integración provista por Zento.<\/li><li><code>X-Zento-Secret<\/code> — secreto asociado a la clave.<\/li><li><code>Authorization<\/code> — <code>Bearer &lt;token&gt;<\/code> — JWT devuelto por <code>POST /v1/auth/token<\/code>.<\/li><li><code>Content-Type: application/json<\/code><\/li><\/ul><h4>Cuerpo (body)<\/h4><table><thead><tr><th>Campo<\/th><th>Descripción<\/th><\/tr><\/thead><tbody><tr><td><code>process_ids<\/code><\/td><td>Lista de UUIDs a consultar.<\/td><\/tr><\/tbody><\/table><h4>Campos de la respuesta<\/h4><table><thead><tr><th>Campo<\/th><th>Descripción<\/th><\/tr><\/thead><tbody><tr><td><code>status<\/code><\/td><td><code>queued<\/code>, <code>in progress<\/code> o <code>finished<\/code>.<\/td><\/tr><tr><td><code>transaction_success_count<\/code><\/td><td>Transferencias exitosas.<\/td><\/tr><tr><td><code>transaction_fail_count<\/code><\/td><td>Transferencias fallidas.<\/td><\/tr><\/tbody><\/table><\/div><div class=\"ep-right\"><div class=\"codetabs dark\"><div class=\"ctabs\"><div class=\"ctabs-scroll\"><button class=\"ctab on\" data-l=\"curl\">cURL<\/button><button class=\"ctab\" data-l=\"js\">JavaScript<\/button><button class=\"ctab\" data-l=\"py\">Python<\/button><button class=\"ctab\" data-l=\"go\">Go<\/button><button class=\"ctab\" data-l=\"cs\">C#<\/button><button class=\"ctab\" data-l=\"java\">Java<\/button><button class=\"ctab\" data-l=\"php\">PHP<\/button><button class=\"ctab\" data-l=\"ps\">PowerShell<\/button><\/div><button class=\"copybtn\" type=\"button\" title=\"Copiar\" aria-label=\"Copiar\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"9\" y=\"9\" width=\"13\" height=\"13\" rx=\"2\"/><path d=\"M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\"/><\/svg><\/button><\/div><div class=\"cpanes\"><pre class=\"cpane on\" data-l=\"curl\"><code>curl -X POST &#x27;https://api.zento.lat/v1/processes/status&#x27; \\\n  -H &#x27;X-Zento-Key: &lt;api_key_del_cliente&gt;&#x27; \\\n  -H &#x27;X-Zento-Secret: &lt;api_secret_del_cliente&gt;&#x27; \\\n  -H &#x27;Authorization: Bearer &lt;token_de_sesion&gt;&#x27; \\\n  -H &#x27;Content-Type: application/json&#x27; \\\n  -d &#x27;{\n  &quot;process_ids&quot;: [\n    &quot;550e8400-e29b-41d4-a716-446655440000&quot;\n  ]\n}&#x27;<\/code><\/pre><pre class=\"cpane\" data-l=\"js\"><code>const res = await fetch(&quot;https://api.zento.lat/v1/processes/status&quot;, {\n  method: &quot;POST&quot;,\n  headers: {\n    &quot;X-Zento-Key&quot;: &quot;&lt;api_key_del_cliente&gt;&quot;,\n    &quot;X-Zento-Secret&quot;: &quot;&lt;api_secret_del_cliente&gt;&quot;,\n    &quot;Authorization&quot;: &quot;Bearer &lt;token_de_sesion&gt;&quot;,\n    &quot;Content-Type&quot;: &quot;application/json&quot;\n  },\n  body: JSON.stringify({\n    &quot;process_ids&quot;: [\n      &quot;550e8400-e29b-41d4-a716-446655440000&quot;\n    ]\n  })\n});\nconst data = await res.json();<\/code><\/pre><pre class=\"cpane\" data-l=\"py\"><code>import requests\n\nresp = requests.post(\n    &quot;https://api.zento.lat/v1/processes/status&quot;,\n    headers={\n      &quot;X-Zento-Key&quot;: &quot;&lt;api_key_del_cliente&gt;&quot;,\n      &quot;X-Zento-Secret&quot;: &quot;&lt;api_secret_del_cliente&gt;&quot;,\n      &quot;Authorization&quot;: &quot;Bearer &lt;token_de_sesion&gt;&quot;\n    },\n    json={\n      &quot;process_ids&quot;: [\n        &quot;550e8400-e29b-41d4-a716-446655440000&quot;\n      ]\n    },\n)\ndata = resp.json()<\/code><\/pre><pre class=\"cpane\" data-l=\"go\"><code>package main\n\nimport (\n    &quot;bytes&quot;\n    &quot;net/http&quot;\n)\n\nfunc main() {\n    payload := bytes.NewBufferString(`{\n  &quot;process_ids&quot;: [\n    &quot;550e8400-e29b-41d4-a716-446655440000&quot;\n  ]\n}`)\n    req, _ := http.NewRequest(&quot;POST&quot;, &quot;https://api.zento.lat/v1/processes/status&quot;, payload)\n    req.Header.Set(&quot;X-Zento-Key&quot;, &quot;&lt;api_key_del_cliente&gt;&quot;)\n    req.Header.Set(&quot;X-Zento-Secret&quot;, &quot;&lt;api_secret_del_cliente&gt;&quot;)\n    req.Header.Set(&quot;Authorization&quot;, &quot;Bearer &lt;token_de_sesion&gt;&quot;)\n    req.Header.Set(&quot;Content-Type&quot;, &quot;application/json&quot;)\n    res, _ := http.DefaultClient.Do(req)\n    defer res.Body.Close()\n}<\/code><\/pre><pre class=\"cpane\" data-l=\"cs\"><code>using System.Net.Http;\nusing System.Text;\n\nvar client = new HttpClient();\nvar request = new HttpRequestMessage(HttpMethod.Post, &quot;https://api.zento.lat/v1/processes/status&quot;);\nrequest.Headers.Add(&quot;X-Zento-Key&quot;, &quot;&lt;api_key_del_cliente&gt;&quot;);\nrequest.Headers.Add(&quot;X-Zento-Secret&quot;, &quot;&lt;api_secret_del_cliente&gt;&quot;);\nrequest.Headers.Add(&quot;Authorization&quot;, &quot;Bearer &lt;token_de_sesion&gt;&quot;);\nrequest.Content = new StringContent(@&quot;{\n  &quot;&quot;process_ids&quot;&quot;: [\n    &quot;&quot;550e8400-e29b-41d4-a716-446655440000&quot;&quot;\n  ]\n}&quot;, Encoding.UTF8, &quot;application/json&quot;);\nvar response = await client.SendAsync(request);<\/code><\/pre><pre class=\"cpane\" data-l=\"java\"><code>HttpClient client = HttpClient.newHttpClient();\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(&quot;https://api.zento.lat/v1/processes/status&quot;))\n    .header(&quot;X-Zento-Key&quot;, &quot;&lt;api_key_del_cliente&gt;&quot;)\n    .header(&quot;X-Zento-Secret&quot;, &quot;&lt;api_secret_del_cliente&gt;&quot;)\n    .header(&quot;Authorization&quot;, &quot;Bearer &lt;token_de_sesion&gt;&quot;)\n    .header(&quot;Content-Type&quot;, &quot;application/json&quot;)\n    .method(&quot;POST&quot;, HttpRequest.BodyPublishers.ofString(&quot;&quot;&quot;\n{\n  &quot;process_ids&quot;: [\n    &quot;550e8400-e29b-41d4-a716-446655440000&quot;\n  ]\n}\n&quot;&quot;&quot;))\n    .build();\nHttpResponse&lt;String&gt; response =\n    client.send(request, HttpResponse.BodyHandlers.ofString());<\/code><\/pre><pre class=\"cpane\" data-l=\"php\"><code>$ch = curl_init(&quot;https://api.zento.lat/v1/processes/status&quot;);\ncurl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\ncurl_setopt($ch, CURLOPT_CUSTOMREQUEST, &quot;POST&quot;);\ncurl_setopt($ch, CURLOPT_HTTPHEADER, [\n    &quot;X-Zento-Key: &lt;api_key_del_cliente&gt;&quot;,\n    &quot;X-Zento-Secret: &lt;api_secret_del_cliente&gt;&quot;,\n    &quot;Authorization: Bearer &lt;token_de_sesion&gt;&quot;,\n    &quot;Content-Type: application/json&quot;,\n]);\ncurl_setopt($ch, CURLOPT_POSTFIELDS, &#x27;{\n  &quot;process_ids&quot;: [\n    &quot;550e8400-e29b-41d4-a716-446655440000&quot;\n  ]\n}&#x27;);\n$response = curl_exec($ch);\ncurl_close($ch);<\/code><\/pre><pre class=\"cpane\" data-l=\"ps\"><code>$headers = @{\n    &quot;X-Zento-Key&quot; = &quot;&lt;api_key_del_cliente&gt;&quot;\n    &quot;X-Zento-Secret&quot; = &quot;&lt;api_secret_del_cliente&gt;&quot;\n    &quot;Authorization&quot; = &quot;Bearer &lt;token_de_sesion&gt;&quot;\n    &quot;Content-Type&quot; = &quot;application/json&quot;\n}\n$body = @&#x27;\n{\n  &quot;process_ids&quot;: [\n    &quot;550e8400-e29b-41d4-a716-446655440000&quot;\n  ]\n}\n&#x27;@\n$response = Invoke-RestMethod -Uri &quot;https://api.zento.lat/v1/processes/status&quot; `\n    -Method POST -Headers $headers -Body $body<\/code><\/pre><\/div><\/div><div class=\"codetabs dark respbox\"><div class=\"ctabs\"><span class=\"resp-label\">Respuesta<\/span><button class=\"copybtn\" type=\"button\" title=\"Copiar\" aria-label=\"Copiar\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"9\" y=\"9\" width=\"13\" height=\"13\" rx=\"2\"/><path d=\"M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\"/><\/svg><\/button><\/div><div class=\"cpanes\"><pre class=\"cpane on\"><code>{\n  &quot;code&quot;: &quot;0200&quot;,\n  &quot;data&quot;: [\n    {\n      &quot;process_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,\n      &quot;status&quot;: &quot;finished&quot;,\n      &quot;transaction_count&quot;: 1,\n      &quot;transaction_success_count&quot;: 1,\n      &quot;transaction_fail_count&quot;: 0,\n      &quot;transaction_processed_count&quot;: 1,\n      &quot;initial_datetime&quot;: &quot;2026-03-23T10:29:42.000Z&quot;,\n      &quot;process_initial_datetime&quot;: &quot;2026-03-23T13:29:44.819Z&quot;,\n      &quot;process_ending_datetime&quot;: &quot;2026-03-23T13:29:45.034Z&quot;\n    }\n  ],\n  &quot;description&quot;: &quot;ok&quot;,\n  &quot;request_id&quot;: &quot;20260323102944499302&quot;\n}<\/code><\/pre><\/div><\/div><\/div><\/div>"], ["Resultado detallado", "resultado-detallado", "<div class=\"ep-row\"><div class=\"ep-left\"><div class=\"ep\"><span class=\"m m-POST\">POST<\/span><code class=\"epath\">/v1/processes/{processId}/result<\/code><\/div><p>Detalle por transacción del lote. <code>{processId}<\/code> es el UUID usado en <code>transfers/cvu<\/code>.<\/p><h4>Headers<\/h4><ul><li><code>X-Zento-Key<\/code> — clave de integración provista por Zento.<\/li><li><code>X-Zento-Secret<\/code> — secreto asociado a la clave.<\/li><li><code>Authorization<\/code> — <code>Bearer &lt;token&gt;<\/code> — JWT devuelto por <code>POST /v1/auth/token<\/code>.<\/li><li><code>Content-Type: application/json<\/code><\/li><\/ul><h4>Campos de la respuesta<\/h4><table><thead><tr><th>Campo<\/th><th>Descripción<\/th><\/tr><\/thead><tbody><tr><td><code>response_code / response_description<\/code><\/td><td>Resultado por transacción.<\/td><\/tr><tr><td><code>from_cvu / to_cvu / amount<\/code><\/td><td>CVUs y monto.<\/td><\/tr><tr><td><code>authorization_code<\/code><\/td><td>Código de autorización.<\/td><\/tr><tr><td><code>transaction_id<\/code><\/td><td>Identificador de la transacción.<\/td><\/tr><\/tbody><\/table><\/div><div class=\"ep-right\"><div class=\"codetabs dark\"><div class=\"ctabs\"><div class=\"ctabs-scroll\"><button class=\"ctab on\" data-l=\"curl\">cURL<\/button><button class=\"ctab\" data-l=\"js\">JavaScript<\/button><button class=\"ctab\" data-l=\"py\">Python<\/button><button class=\"ctab\" data-l=\"go\">Go<\/button><button class=\"ctab\" data-l=\"cs\">C#<\/button><button class=\"ctab\" data-l=\"java\">Java<\/button><button class=\"ctab\" data-l=\"php\">PHP<\/button><button class=\"ctab\" data-l=\"ps\">PowerShell<\/button><\/div><button class=\"copybtn\" type=\"button\" title=\"Copiar\" aria-label=\"Copiar\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"9\" y=\"9\" width=\"13\" height=\"13\" rx=\"2\"/><path d=\"M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\"/><\/svg><\/button><\/div><div class=\"cpanes\"><pre class=\"cpane on\" data-l=\"curl\"><code>curl -X POST &#x27;https://api.zento.lat/v1/processes/{processId}/result&#x27; \\\n  -H &#x27;X-Zento-Key: &lt;api_key_del_cliente&gt;&#x27; \\\n  -H &#x27;X-Zento-Secret: &lt;api_secret_del_cliente&gt;&#x27; \\\n  -H &#x27;Authorization: Bearer &lt;token_de_sesion&gt;&#x27; \\\n  -H &#x27;Content-Type: application/json&#x27; \\\n  -d &#x27;{}&#x27;<\/code><\/pre><pre class=\"cpane\" data-l=\"js\"><code>const res = await fetch(&quot;https://api.zento.lat/v1/processes/{processId}/result&quot;, {\n  method: &quot;POST&quot;,\n  headers: {\n    &quot;X-Zento-Key&quot;: &quot;&lt;api_key_del_cliente&gt;&quot;,\n    &quot;X-Zento-Secret&quot;: &quot;&lt;api_secret_del_cliente&gt;&quot;,\n    &quot;Authorization&quot;: &quot;Bearer &lt;token_de_sesion&gt;&quot;,\n    &quot;Content-Type&quot;: &quot;application/json&quot;\n  },\n  body: JSON.stringify({})\n});\nconst data = await res.json();<\/code><\/pre><pre class=\"cpane\" data-l=\"py\"><code>import requests\n\nresp = requests.post(\n    &quot;https://api.zento.lat/v1/processes/{processId}/result&quot;,\n    headers={\n      &quot;X-Zento-Key&quot;: &quot;&lt;api_key_del_cliente&gt;&quot;,\n      &quot;X-Zento-Secret&quot;: &quot;&lt;api_secret_del_cliente&gt;&quot;,\n      &quot;Authorization&quot;: &quot;Bearer &lt;token_de_sesion&gt;&quot;\n    },\n    json={},\n)\ndata = resp.json()<\/code><\/pre><pre class=\"cpane\" data-l=\"go\"><code>package main\n\nimport (\n    &quot;bytes&quot;\n    &quot;net/http&quot;\n)\n\nfunc main() {\n    payload := bytes.NewBufferString(`{}`)\n    req, _ := http.NewRequest(&quot;POST&quot;, &quot;https://api.zento.lat/v1/processes/{processId}/result&quot;, payload)\n    req.Header.Set(&quot;X-Zento-Key&quot;, &quot;&lt;api_key_del_cliente&gt;&quot;)\n    req.Header.Set(&quot;X-Zento-Secret&quot;, &quot;&lt;api_secret_del_cliente&gt;&quot;)\n    req.Header.Set(&quot;Authorization&quot;, &quot;Bearer &lt;token_de_sesion&gt;&quot;)\n    req.Header.Set(&quot;Content-Type&quot;, &quot;application/json&quot;)\n    res, _ := http.DefaultClient.Do(req)\n    defer res.Body.Close()\n}<\/code><\/pre><pre class=\"cpane\" data-l=\"cs\"><code>using System.Net.Http;\nusing System.Text;\n\nvar client = new HttpClient();\nvar request = new HttpRequestMessage(HttpMethod.Post, &quot;https://api.zento.lat/v1/processes/{processId}/result&quot;);\nrequest.Headers.Add(&quot;X-Zento-Key&quot;, &quot;&lt;api_key_del_cliente&gt;&quot;);\nrequest.Headers.Add(&quot;X-Zento-Secret&quot;, &quot;&lt;api_secret_del_cliente&gt;&quot;);\nrequest.Headers.Add(&quot;Authorization&quot;, &quot;Bearer &lt;token_de_sesion&gt;&quot;);\nrequest.Content = new StringContent(@&quot;{}&quot;, Encoding.UTF8, &quot;application/json&quot;);\nvar response = await client.SendAsync(request);<\/code><\/pre><pre class=\"cpane\" data-l=\"java\"><code>HttpClient client = HttpClient.newHttpClient();\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(&quot;https://api.zento.lat/v1/processes/{processId}/result&quot;))\n    .header(&quot;X-Zento-Key&quot;, &quot;&lt;api_key_del_cliente&gt;&quot;)\n    .header(&quot;X-Zento-Secret&quot;, &quot;&lt;api_secret_del_cliente&gt;&quot;)\n    .header(&quot;Authorization&quot;, &quot;Bearer &lt;token_de_sesion&gt;&quot;)\n    .header(&quot;Content-Type&quot;, &quot;application/json&quot;)\n    .method(&quot;POST&quot;, HttpRequest.BodyPublishers.ofString(&quot;&quot;&quot;\n{}\n&quot;&quot;&quot;))\n    .build();\nHttpResponse&lt;String&gt; response =\n    client.send(request, HttpResponse.BodyHandlers.ofString());<\/code><\/pre><pre class=\"cpane\" data-l=\"php\"><code>$ch = curl_init(&quot;https://api.zento.lat/v1/processes/{processId}/result&quot;);\ncurl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\ncurl_setopt($ch, CURLOPT_CUSTOMREQUEST, &quot;POST&quot;);\ncurl_setopt($ch, CURLOPT_HTTPHEADER, [\n    &quot;X-Zento-Key: &lt;api_key_del_cliente&gt;&quot;,\n    &quot;X-Zento-Secret: &lt;api_secret_del_cliente&gt;&quot;,\n    &quot;Authorization: Bearer &lt;token_de_sesion&gt;&quot;,\n    &quot;Content-Type: application/json&quot;,\n]);\ncurl_setopt($ch, CURLOPT_POSTFIELDS, &#x27;{}&#x27;);\n$response = curl_exec($ch);\ncurl_close($ch);<\/code><\/pre><pre class=\"cpane\" data-l=\"ps\"><code>$headers = @{\n    &quot;X-Zento-Key&quot; = &quot;&lt;api_key_del_cliente&gt;&quot;\n    &quot;X-Zento-Secret&quot; = &quot;&lt;api_secret_del_cliente&gt;&quot;\n    &quot;Authorization&quot; = &quot;Bearer &lt;token_de_sesion&gt;&quot;\n    &quot;Content-Type&quot; = &quot;application/json&quot;\n}\n$body = @&#x27;\n{}\n&#x27;@\n$response = Invoke-RestMethod -Uri &quot;https://api.zento.lat/v1/processes/{processId}/result&quot; `\n    -Method POST -Headers $headers -Body $body<\/code><\/pre><\/div><\/div><div class=\"codetabs dark respbox\"><div class=\"ctabs\"><span class=\"resp-label\">Respuesta<\/span><button class=\"copybtn\" type=\"button\" title=\"Copiar\" aria-label=\"Copiar\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"9\" y=\"9\" width=\"13\" height=\"13\" rx=\"2\"/><path d=\"M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\"/><\/svg><\/button><\/div><div class=\"cpanes\"><pre class=\"cpane on\"><code>{\n  &quot;code&quot;: &quot;0200&quot;,\n  &quot;status&quot;: &quot;finished&quot;,\n  &quot;data&quot;: [\n    {\n      &quot;from_cvu&quot;: &quot;&lt;cvu_origen&gt;&quot;,\n      &quot;to_cvu&quot;: &quot;&lt;cvu_destino&gt;&quot;,\n      &quot;amount&quot;: &quot;1.00&quot;,\n      &quot;response_code&quot;: &quot;0200&quot;,\n      &quot;response_description&quot;: &quot;ok&quot;,\n      &quot;authorization_code&quot;: &quot;358164&quot;,\n      &quot;transaction_id&quot;: &quot;TX00000001&quot;\n    }\n  ]\n}<\/code><\/pre><\/div><\/div><\/div><\/div>"], ["Códigos de negocio frecuentes", "codigos-de-negocio-frecuentes", "<table><thead><tr><th>Operación<\/th><th>code (éxito típico)<\/th><th>Notas<\/th><\/tr><\/thead><tbody><tr><td><code>POST /v1/auth/token<\/code><\/td><td><code>0200<\/code><\/td><td>JWT en <code>token<\/code><\/td><\/tr><tr><td><code>POST /v1/accounts/balance<\/code><\/td><td><code>2200<\/code><\/td><td>Saldos en <code>data<\/code><\/td><\/tr><tr><td><code>POST /v1/transfers/cvu<\/code><\/td><td><code>0201<\/code><\/td><td>Lote aceptado<\/td><\/tr><tr><td><code>POST /v1/processes/status<\/code><\/td><td><code>0200<\/code><\/td><td>Resumen en <code>data[]<\/code><\/td><\/tr><tr><td><code>POST /v1/processes/{id}/result<\/code><\/td><td><code>0200<\/code><\/td><td>Detalle por transacción<\/td><\/tr><\/tbody><\/table><p>Otros códigos (<code>0400<\/code>, <code>0412<\/code>, etc.) indican validación o reglas de negocio.<\/p>"], ["Errores HTTP y diagnóstico", "errores-http-y-diagnostico", "<table><thead><tr><th>Síntoma<\/th><th>Causa probable<\/th><\/tr><\/thead><tbody><tr><td><code>401<\/code> en <code>/v1/*<\/code><\/td><td><code>X-Zento-Key<\/code> / <code>X-Zento-Secret<\/code> ausentes o incorrectos<\/td><\/tr><tr><td><code>401<\/code> con Bearer<\/td><td>Token vencido o mal copiado<\/td><\/tr><tr><td><code>0400<\/code> en balance<\/td><td>Cuerpo incorrecto (<code>account<\/code> / <code>trace<\/code> / <code>retrieval<\/code>)<\/td><\/tr><tr><td><code>0400<\/code> en transfer<\/td><td><code>initial_datetime<\/code>, CVU u otra regla operativa<\/td><\/tr><tr><td><code>0412<\/code><\/td><td><code>process_id<\/code> ya utilizado<\/td><\/tr><tr><td><code>403<\/code><\/td><td>Operación no habilitada para tu integración<\/td><\/tr><tr><td><code>502<\/code> <code>bad_gateway<\/code><\/td><td>Error temporal; reintentá y registrá <code>request_id<\/code> / <code>X-Request-Id<\/code><\/td><\/tr><\/tbody><\/table>"], ["Trazabilidad", "trazabilidad", "<ul><li><code>request_id<\/code> en el JSON de respuesta.<\/li><li><code>X-Request-Id<\/code> en headers: registralo para soporte con Zento.<\/li><\/ul>"], ["Seguridad y buenas prácticas", "seguridad-y-buenas-practicas", "<ul><li>No expongas <code>X-Zento-Secret<\/code> ni el <code>webhook_secret<\/code> en repositorios públicos ni correos en claro.<\/li><li>Solicitá rotación inmediata si un secreto se filtra.<\/li><li>Usá HTTPS en <code>callback_url<\/code>.<\/li><li>Acordá con Zento montos, CVU de prueba y ventanas antes de pruebas en producción.<\/li><\/ul>"]]}}, "start": "api"}</script>
+<script>
+const DATA=JSON.parse(document.getElementById("docdata").textContent);
+const PAGES=DATA.pages, NAV=DATA.nav;
+let current=DATA.start, currentSec=null;
+
+function renderSide(){
+  const side=document.getElementById("sidenav");side.innerHTML="";
+  NAV.forEach(([g,items])=>{
+    const grp=document.createElement("div");grp.className="grp";
+    const h=document.createElement("h4");
+    h.innerHTML='<span class="chev">▼</span><span>'+g+'</span>';
+    h.onclick=()=>grp.classList.toggle("closed");
+    grp.appendChild(h);
+    const pb=document.createElement("div");pb.className="pages";
+    items.forEach(([id,label])=>{
+      const pg=document.createElement("div");
+      pg.className="pg"+(id===current?" active":" closed");
+      const row=document.createElement("div");row.className="row";
+      row.innerHTML='<span class="chev">▼</span><span class="lbl">'+label+'</span>';
+      row.querySelector(".chev").onclick=e=>{e.stopPropagation();pg.classList.toggle("closed")};
+      row.querySelector(".lbl").onclick=()=>openPage(id);
+      pg.appendChild(row);
+      const subs=document.createElement("div");subs.className="subs";
+      (PAGES[id].secs||[]).forEach(([t,sid])=>{
+        const a=document.createElement("div");a.className="sub";
+        a.dataset.page=id;a.dataset.sec="sec-"+sid;a.textContent=t;
+        if(id===current&&"sec-"+sid===currentSec)a.classList.add("on");
+        a.onclick=()=>goto(id,"sec-"+sid);
+        subs.appendChild(a);
+      });
+      pg.appendChild(subs);pb.appendChild(pg);
+    });
+    grp.appendChild(pb);side.appendChild(grp);
+  });
+}
+const ICONS={
+  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+  plug:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6"/><path d="M15 2v6"/><path d="M6 8h12v3a6 6 0 0 1-12 0z"/><path d="M12 17v5"/></svg>',
+  bot:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 2v4"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/><path d="M2 13v2M22 13v2"/></svg>',
+  notes:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h11M8 12h11M8 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg>',
+  shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'
+};
+const HOME=[
+  ["api","Integración (API)","Token, balance, transferencias por CVU, estado, resultado, códigos y más.","plug"]
+];
+function renderHome(){
+  const w=document.getElementById("wrap");
+  let h='<div class="home"><div class="eyebrow">Documentación</div><h1>Documentación de Zento</h1>'+
+    '<p class="home-sub">Guía para integrarte con la API pública de Zento.</p><div class="cards">';
+  HOME.forEach(([id,t,d,ic])=>{
+    h+='<button class="card" data-go="'+id+'"><span class="ic">'+ICONS[ic]+'</span>'+
+       '<span><h3>'+t+'</h3><p>'+d+'</p></span>'+
+       '<span class="arr"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>';
+  });
+  h+='</div></div>';
+  w.innerHTML=h;document.getElementById("main").scrollTop=0;
+  w.querySelectorAll(".card").forEach(c=>c.onclick=()=>openPage(c.dataset.go));
+}
+function renderMain(){
+  if(current==="home"){renderHome();return;}
+  const p=PAGES[current],w=document.getElementById("wrap");
+  let h='<div class="crumb">'+p.crumb+'</div><h1>'+p.title+'</h1>';
+  if(p.lead)h+='<p class="lead">'+p.lead+'</p>';
+  if(p.intro)h+='<div class="ct-body">'+p.intro+'</div>';
+  (p.secs||[]).forEach(([t,sid,body])=>{
+    h+='<section class="sec" id="sec-'+sid+'"><h2>'+t+'</h2><div class="ct-body">'+body+'</div></section>';
+  });
+  w.innerHTML=h;document.getElementById("main").scrollTop=0;wireTabs();
+}
+let LANG="curl";
+try{const s=localStorage.getItem("zento-lang");if(s)LANG=s;}catch(e){}
+function applyLang(){
+  document.querySelectorAll(".codetabs:not(.respbox)").forEach(ct=>{
+    let has=false;
+    ct.querySelectorAll(".ctab").forEach(b=>{const on=b.dataset.l===LANG;b.classList.toggle("on",on);if(on)has=true;});
+    ct.querySelectorAll(".cpane").forEach(p=>p.classList.toggle("on",p.dataset.l===LANG));
+    if(!has){ct.querySelector(".ctab")?.classList.add("on");ct.querySelector(".cpane")?.classList.add("on");}
+  });
+}
+function wireCopy(){
+  document.querySelectorAll(".copybtn").forEach(btn=>btn.onclick=async()=>{
+    const box=btn.closest(".codetabs");
+    const pane=box.querySelector(".cpane.on")||box.querySelector(".cpane");
+    const txt=pane?pane.innerText:"";
+    let ok=false;
+    try{await navigator.clipboard.writeText(txt);ok=true;}catch(e){
+      try{const r=document.createRange();r.selectNodeContents(pane);const s=getSelection();s.removeAllRanges();s.addRange(r);ok=document.execCommand("copy");s.removeAllRanges();}catch(_){}
+    }
+    const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+    if(ok){const o=btn.innerHTML;btn.innerHTML=CHECK;btn.classList.add("done");btn.title="Copiado";
+      setTimeout(()=>{btn.innerHTML=o;btn.classList.remove("done");btn.title="Copiar";},1300);}
+  });
+}
+function wireTabs(){
+  document.querySelectorAll(".ctab").forEach(b=>b.onclick=()=>{
+    LANG=b.dataset.l;try{localStorage.setItem("zento-lang",LANG);}catch(e){}applyLang();
+  });
+  applyLang();wireCopy();
+}
+function openPage(id){if(id!==current){current=id;currentSec=null;renderMain();}renderSide();close();}
+function goto(id,sec){
+  if(id!==current){current=id;currentSec=sec;renderMain();renderSide();
+    requestAnimationFrame(()=>document.getElementById(sec)?.scrollIntoView({block:"start"}));
+  }else{currentSec=sec;markSub();document.getElementById(sec)?.scrollIntoView({behavior:"smooth",block:"start"});}
+  close();
+}
+function markSub(){document.querySelectorAll(".sub").forEach(a=>a.classList.toggle("on",a.dataset.page===current&&a.dataset.sec===currentSec));}
+function close(){document.getElementById("side").classList.remove("open");}
+document.getElementById("main").addEventListener("scroll",()=>{
+  const m=document.getElementById("main"),secs=[...m.querySelectorAll(".sec")];let act=secs[0];
+  for(const s of secs){if(s.getBoundingClientRect().top<150)act=s;}
+  if(act){currentSec=act.id;markSub();}
+});
+function toggleTheme(){
+  const r=document.documentElement;
+  const dark=r.getAttribute("data-theme")==="dark"||(!r.getAttribute("data-theme")&&matchMedia("(prefers-color-scheme:dark)").matches);
+  r.setAttribute("data-theme",dark?"light":"dark");
+}
+document.getElementById("menuBtn").onclick=()=>document.getElementById("side").classList.toggle("open");
+document.querySelector(".brand").onclick=()=>openPage("api");
+document.getElementById("floatMenu").onclick=()=>document.getElementById("side").classList.toggle("open");
+try{if(window.self!==window.top)document.documentElement.classList.add("embedded");}catch(e){document.documentElement.classList.add("embedded");}
+
+/* ---------- buscador ---------- */
+const PAGELABEL={};
+NAV.forEach(([g,items])=>items.forEach(([id,label])=>PAGELABEL[id]=label));
+function strip(h){const d=document.createElement("div");d.innerHTML=h||"";return (d.textContent||"").replace(/\s+/g," ").trim();}
+function norm(s){return (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");}
+function esc(s){return (s||"").replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));}
+const INDEX=[];
+Object.keys(PAGES).forEach(id=>{
+  const p=PAGES[id], plabel=PAGELABEL[id]||p.title||id;
+  const introText=strip((p.lead?("<p>"+p.lead+"</p>"):"")+(p.intro||""));
+  if(introText) INDEX.push({page:id,sec:null,title:p.title||plabel,crumb:p.crumb||"",text:introText});
+  (p.secs||[]).forEach(([t,sid,body])=>{
+    INDEX.push({page:id,sec:"sec-"+sid,title:t,crumb:(p.title||plabel),text:strip(body)});
+  });
+});
+function mark(escaped,words){
+  let s=escaped;
+  words.forEach(w=>{if(w.length<2)return;
+    const re=new RegExp("("+w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","ig");s=s.replace(re,"<mark>$1</mark>");});
+  return s;
+}
+function snippet(text,words){
+  const nt=norm(text);let pos=-1;
+  for(const w of words){const i=nt.indexOf(w);if(i>=0&&(pos<0||i<pos))pos=i;}
+  if(pos<0)pos=0;
+  const start=Math.max(0,pos-45);
+  let s=text.slice(start,start+150);
+  if(start>0)s="…"+s;
+  if(start+150<text.length)s=s+"…";
+  return mark(esc(s),words);
+}
+function doSearch(q){
+  const nq=norm(q).trim();if(nq.length<2)return [];
+  const words=nq.split(/\s+/).filter(Boolean);
+  const res=[];
+  INDEX.forEach(e=>{
+    const nt=norm(e.title),hay=nt+" "+norm(e.text);
+    if(words.every(w=>hay.includes(w))){
+      let score=0;if(words.every(w=>nt.includes(w)))score+=10;if(nt.startsWith(words[0]))score+=5;
+      res.push({e,score});
+    }
+  });
+  res.sort((a,b)=>b.score-a.score);
+  return res.slice(0,12).map(r=>r.e);
+}
+function closeSearch(){document.getElementById("results").classList.remove("open");}
+function renderResults(q){
+  const box=document.getElementById("results");
+  const words=norm(q).trim().split(/\s+/).filter(Boolean);
+  if(q.trim().length<2){box.classList.remove("open");box.innerHTML="";return;}
+  const list=doSearch(q);
+  if(!list.length){box.innerHTML='<div class="rempty">Sin resultados para "'+esc(q.trim())+'".</div>';box.classList.add("open");return;}
+  box.innerHTML=list.map((e,i)=>
+    '<button class="ritem" data-i="'+i+'"><div class="rt">'+mark(esc(e.title),words)+'</div>'+
+    (e.crumb?'<div class="rp">'+esc(e.crumb)+'</div>':'')+
+    '<div class="rs">'+snippet(e.text,words)+'</div></button>').join("");
+  box.classList.add("open");
+  box.querySelectorAll(".ritem").forEach((b,i)=>b.onclick=()=>{
+    const e=list[i];if(e.sec)goto(e.page,e.sec);else openPage(e.page);
+    document.getElementById("q").value="";closeSearch();
+  });
+}
+(function(){
+  const q=document.getElementById("q");
+  q.addEventListener("input",()=>renderResults(q.value));
+  q.addEventListener("keydown",e=>{
+    if(e.key==="Escape"){q.value="";closeSearch();q.blur();}
+    else if(e.key==="Enter"){const f=document.querySelector(".ritem");if(f)f.click();}
+  });
+  document.addEventListener("click",e=>{if(!e.target.closest(".search-wrap"))closeSearch();});
+})();
+
+renderSide();renderMain();
+</script>
+</body>
+</html>
